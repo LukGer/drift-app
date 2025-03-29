@@ -1,62 +1,42 @@
 import { relations } from "drizzle-orm";
 import { int, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const ReadStates = ["to_read", "reading", "read"] as const;
+//#region Spaces
 
-export type ReadState = (typeof ReadStates)[number];
-
-export const books = sqliteTable("books", {
+export const spaces = sqliteTable("spaces", {
   id: int().primaryKey({ autoIncrement: true }),
-  title: text().notNull(),
-  subtitle: text(),
-  authors: text(),
-  publisher: text(),
-  publishedDate: text(),
-  description: text(),
-  isbn: text().notNull(),
-  pageCount: int(),
-  mainCategory: text(),
-  averageRating: real(),
-  thumbnailUrl: text(),
-  state: text({ enum: ReadStates }).notNull(),
-});
-
-export type DbBook = typeof books.$inferSelect;
-
-export const booksRelations = relations(books, ({ many }) => ({
-  categories: many(booksToCategories),
-}));
-
-export const categories = sqliteTable("categories", {
-  id: int().primaryKey({ autoIncrement: true }),
+  icon: text(),
   name: text().notNull(),
+  colorHex: text(),
 });
 
-export type DbCategory = typeof categories.$inferSelect;
-
-export const categoriesRelations = relations(categories, ({ many }) => ({
-  books: many(booksToCategories),
+export const spaceRelations = relations(spaces, ({ many }) => ({
+  expenses: many(expenses),
 }));
 
-export const booksToCategories = sqliteTable("book_categories", {
-  bookId: int()
-    .notNull()
-    .references(() => books.id),
-  categoryId: int()
-    .notNull()
-    .references(() => categories.id),
+export type DbSpace = typeof spaces.$inferSelect;
+export type DbSpaceInsert = typeof spaces.$inferInsert;
+
+//#endregion
+
+//#region Expenses
+
+export const expenses = sqliteTable("expenses", {
+  id: int().primaryKey({ autoIncrement: true }),
+  amount: real().notNull(),
+  date: text().notNull(),
+  description: text(),
+  spaceId: int(),
 });
 
-export const booksToCategoriesRelations = relations(
-  booksToCategories,
-  ({ one }) => ({
-    book: one(books, {
-      fields: [booksToCategories.bookId],
-      references: [books.id],
-    }),
-    category: one(categories, {
-      fields: [booksToCategories.categoryId],
-      references: [categories.id],
-    }),
-  })
-);
+export const expenseRelations = relations(expenses, ({ one }) => ({
+  spaces: one(spaces, {
+    fields: [expenses.spaceId],
+    references: [spaces.id],
+  }),
+}));
+
+export type DbExpense = typeof expenses.$inferSelect;
+export type DbExpenseInsert = typeof expenses.$inferInsert;
+
+//#endregion
