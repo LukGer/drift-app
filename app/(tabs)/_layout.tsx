@@ -36,7 +36,7 @@ const TabBar = ({ navigation }: BottomTabBarProps) => {
 
         <TouchableOpacity
           style={[bottomBarStyle.button, bottomBarStyle.primaryButton]}
-          onPress={() => navigation.navigate("add/index")}
+          onPress={() => navigation.navigate("add")}
         >
           <DiamondPlusIcon color="black" size={28} />
         </TouchableOpacity>

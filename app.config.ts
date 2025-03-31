@@ -101,6 +101,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     "expo-sqlite",
     "@bacons/apple-colors",
+    [
+      "expo-font",
+      {
+        fonts: [
+          "assets/fonts/Nunito-Italic-VariableFont_wght.ttf",
+          "assets/fonts/Nunito-VariableFont_wght.ttf",
+        ],
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,

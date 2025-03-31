@@ -46,7 +46,10 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <Stack>
           <Stack.Screen name="index" />
-          {/* <Stack.Screen name="add/index" options={{ presentation: "modal" }} /> */}
+          <Stack.Screen
+            name="add"
+            options={{ presentation: "transparentModal", headerShown: false }}
+          />
         </Stack>
       </QueryClientProvider>
     </GestureHandlerRootView>
